@@ -1,0 +1,94 @@
+
+
+
+
+:host ::ng-deep
+    .mat-icon {
+     width: 100px;
+     font-size: 56px;
+   }
+   
+   :host ::ng-deep .mat-step-icon {
+    background-color: black;
+    color: #fff;
+  }
+  
+  :host ::ng-deep.mat-step-label  {
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  :host ::ng-deep .mat-step-icon {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  }
+  
+  .message{
+    width: 100%;
+    padding: 0% 20%;
+  }
+  
+  .stepicon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: green;
+    color: white;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  
+  
+  
+  
+  
+  .topheaderright {
+    height: 60px;
+    background: #F5F5F5;
+    text-align: center;
+    padding-top: 10px;
+  }
+  .topheader-title {
+    font-size: 22px;
+    margin: 0px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  
+  :host ::ng-deep .mat-card  {
+    box-shadow:0px 0px !important;
+  }
+  
+  .header{
+    width:100%;
+  }
+  .header-title{
+    margin: 0 auto;
+    width: 50%;
+  }
+  .header-message-mobile{
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+    font-size: 12px;
+  }
+  .header-message{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 12px;
+  }
+  .logo{
+    text-align: center;
+  }

@@ -1,0 +1,32 @@
+.customerinfo-label {
+    font-size: 15px;
+    color: #8f8888;
+}
+
+/* material button*/
+button.btn-black.mat-raised-button {
+    background-color: black;
+    color: white;
+}
+
+button.btn-black.mat-raised-button[disabled]{
+    background-color:#e1d5d5;
+    color: white;
+}
+h6.tblHeader {
+    background-color: #9e9e9e;
+    line-height: 1.9;
+    position: relative;
+    top: 8px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+@media print { 
+    
+    .coverage-information table{
+         width:80%;
+     }
+    
+
+ }

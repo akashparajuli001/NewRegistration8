@@ -1,0 +1,40 @@
+<mat-card class="product-details">
+     <mat-card-content class="mat-card-customer-information-content">
+        <div class="unit-information">
+            <div fxLayout="column">
+                <div>
+                  <label class="customerinfo-label">Serial Number:</label>
+                  <label>{{entitlement?.SerNum}}</label>
+                </div>
+                <div>
+                  <label class="customerinfo-label">Model Description:</label>
+                  <label>{{entitlement?.Modeldesc}}</label>
+                </div>
+                <div>
+                  <label class="customerinfo-label">Model:</label>
+                  <label>{{entitlement?.Model}}</label>
+                </div>
+                <div>
+                  <label class="customerinfo-label">Registration Date:</label>
+                  <label>{{entitlement?.RegistrationDate | date :'MM/dd/yyyy'}}</label>
+                </div>
+                <div>
+                  <label class="customerinfo-label">Install Date:</label>
+                  <label> {{getInstallDate(entitlement?.InstallDate)}}</label>
+                </div>
+                <div>
+                  <label class="customerinfo-label">Manufacture Date:</label>
+                  <label>{{entitlement?.ManufactureDate |date :'MM/dd/yyyy'}}</label>
+                </div>
+              </div>
+        </div>
+        <div class="coverage-information">
+
+          <div [innerHTML]="entitlement?.StandardCoverage" class="standard-coverage">
+
+          </div>
+          <div [innerHTML]="entitlement?.RegisteredCoverage" class="registered-coverage">
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>

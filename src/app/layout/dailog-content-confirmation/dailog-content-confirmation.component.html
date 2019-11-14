@@ -1,0 +1,32 @@
+<mat-dialog-content>
+  <p>
+    <b>  Please confirm the name/address information is correct.</b>
+  
+  </p>
+  <div>
+    <address>
+   {{Customer.FirstName}} &nbsp; {{Customer.LastName}} {{Customer.CompanyName}}
+      <br> {{Customer.Address1}}
+      <br> {{Customer.City}}, {{Customer.state}} &nbsp; {{Customer.Zip}}
+      <br> {{Customer.PhoneNumber}}
+    </address>
+    <table>
+      <thead>
+        <th>Serial #</th>
+        <th>Model #</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let unit of unitsToRegister; let i = index">
+          <td>{{unit.serialnumber}}</td>
+          <td>{{unit.item}}</td>
+        </tr>
+       
+      </tbody>
+    </table>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions style="text-align: center">
+    <button  matInput mat-raised-button class="btn-black" [mat-dialog-close]="true" (click)="affirm()">Yes</button>
+    <button matInput mat-raised-button  mat-dialog-close (click)="decline()">No</button>
+</mat-dialog-actions>

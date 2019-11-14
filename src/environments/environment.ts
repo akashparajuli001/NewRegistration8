@@ -2,8 +2,13 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+
 export const environment = {
-  production: false
+  production: false,
+  ipUrl:'https://api.ipify.org?format=json',
+   webserviceurl: 'http://localhost:8080/Services/Warranty/WarrantyService.svc/json/Execute',
+ // webserviceurl: '/Services/Warranty/WarrantyService.svc/json/Execute',
+  BazzarVoiceUrl: 'http://display.ugc.bazaarvoice.com/static/company/en_US/container.htm?bvaction=rr_submit_review&amp&bvproductId=item'
 };
 
 /*

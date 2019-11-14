@@ -1,0 +1,455 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
+
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <ng-template matStepperIcon="edit">
+    <mat-icon>check</mat-icon>
+  </ng-template>
+  <mat-step [stepControl]="productInfoFromGroup">
+    <mat-card>
+
+
+      <form autocomplete="off" [formGroup]="productInfoFromGroup">
+        <ng-template matStepLabel>Product Info</ng-template>
+        <section class="product-info">
+          <!-- <div class="stepicon">
+            <span>1</span>
+            
+          </div> -->
+
+          <div fxLayout="column">
+            <mat-form-field>
+              <input #serialnumber autocomplete="new-serial" name="serial" matInput placeholder="Serial number"
+                formControlName="serialNumber" (change)="onSerialNumberChange(serialnumber.value)" >
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input type="text" placeholder="Item" aria-label="Number" matInput [formControl]="itemControl"
+                [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-checkbox *ngIf="isDirectComfortSerial"> Check the box if this is a Direct Comfort unit.
+            </mat-checkbox>
+
+            <div style="padding:10px 0px">
+              <button [disabled]="disableAddSerial" matInput mat-raised-button class="btn-black" (click)="addSerial()">Add
+                Serial</button>
+                <button (click)="testBazar()">TestBaazar</button>
+            </div>
+            <div style="padding:10px 0px">
+              <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length > 0">
+
+                <!--- Note that these columns can be defined in any order.
+                              The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="serialnumber">
+                  <mat-header-cell *matHeaderCellDef> Serial Number </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [style.color]="element.warning"> {{element.serialnumber}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="item">
+                  <mat-header-cell *matHeaderCellDef> Item </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [style.color]="element.warning"> {{element.item}} </mat-cell>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="modeldesc">
+                  <mat-header-cell *matHeaderCellDef> Model Desc </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [style.color]="element.warning"> {{element.modeldesc}} </mat-cell>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="delLogo">
+                  <mat-header-cell *matHeaderCellDef> Model Desc </mat-header-cell>
+                  <mat-cell> </mat-cell>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="symbol">
+                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <a (click)="onDeleteClick(element.serialnumber,element.item)">
+                      <mat-icon class="pointer">delete</mat-icon>
+                    </a>
+
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+              </mat-table>
+            </div>
+
+            <mat-form-field>
+              <input matInput autocomplete="new-date" [max]="maxDate" #date [matDatepicker]="picker" formControlName="installDate"  (change)="onChange($event)"
+                (click)="picker.open()" placeholder="Installed Date">
+              <mat-datepicker-toggle matSuffix [for]="picker" hidden></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <div style="padding:10px 0px">
+              <label>*Please specify the type of setting in which you will be using the products to be registered:*</label>
+              <mat-radio-group formControlName="installType" fxLayout="column">
+                <mat-radio-button value="RES">Residential(Owner Occupied Residence)</mat-radio-button>
+                <mat-radio-button value="COM">Commercial</mat-radio-button>
+                <mat-radio-button value="MFY">Multi-Family Residential(Non-Owner Occupied Residence)</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start">
+              <button [disabled]="!isNextButtonValid()" color="primary" mat-button mat-raised-button class="btn-black"
+                (click)="onClickProductNextButton(stepper)">Next</button>
+            </div>
+          </div>
+        </section>
+
+
+      </form>
+    </mat-card>
+  </mat-step>
+
+  <mat-step [stepControl]="customerInfoFormGroup">
+    <!-- <ng-template style="font-size:2rem" matStepLabel>Customer Info</ng-template>
+    <reg-customer-info></reg-customer-info> -->
+    <mat-card>
+      <form fxLayout="column" [formGroup]="customerInfoFormGroup">
+        <ng-template style="font-size:2rem" matStepLabel>Customer Info</ng-template>
+        <mat-form-field *ngIf="!isCommericalType">
+          <input matInput type="text" autocomplete="new" name="firstname" #firstname placeholder="First Name" [focus]="focusTriggerEmitter"
+            formControlName="firstNameCtrl" required>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!isCommericalType" floatPlaceholder="auto">
+          <input autocomplete="new-lastname" name="lastname" matInput type="text" placeholder="Last Name"
+            formControlName="lstNameCtrl" required>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isCommericalType" floatPlaceholder="auto">
+          <input autocomplete="new-businessname" name="businessname" matInput type="text" placeholder="Business Name"
+            formControlName="businesNameCtrl" required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="text" name="phone" #phone autocomplete="new-phone" 
+    placeholder="Phone" formControlName="phoneCtrl" (change)="onPhoneNumberChange(phone.value)"
+            required>
+            <mat-error *ngIf="invalidPhone">Please enter valid phone #.</mat-error>
+        </mat-form-field>
+       
+        <mat-form-field>
+          <input matInput type="text" #customeremail name="email" autocomplete="new-email" placeholder="Email" formControlName="emailCtrl" (change)="onEmailAddressChange(customeremail.value)"
+            >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" name="addr1" autocomplete="new-addr1" placeholder="Address1" formControlName="addr1Ctrl" 
+            required>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" name="addr2" autocomplete="new-addr2" placeholder="Address2" formControlName="addr2Ctrl">
+        </mat-form-field>
+        <mat-form-field>
+          <input #zipcode type="text" name="zip" autocomplete="new-zip" matInput placeholder="Zip/Postal Code" formControlName="zipCtrl"
+            required (change)="onZipCodeChange(zipcode.value)">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" name="city" autocomplete="new-city" placeholder="City" formControlName="cityCtrl"
+            required>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" #state namne="state" autocomplete="new-state" placeholder="State/Province" formControlName="stateCtrl" (change)="onStateChange(state.value)"
+            required>
+           
+        </mat-form-field>
+       
+        <mat-form-field>
+          <mat-select placeholder="Country" formControlName="countryCtrl">
+            <mat-option value="United States">United States</mat-option>
+            <mat-option value="Canada">Canada</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="mailingAddressChkBoxContrl"> Check if your mailing address is different than
+          your home address
+        </mat-checkbox>
+
+        <mat-form-field *ngIf="hasMailingAddress">
+          <input matInput name="mailaddr" autocomplete="new-mailaddr" placeholder="Mailing Address1" formControlName="mailingAddr1Ctrl"
+            required>
+        </mat-form-field>
+        <mat-form-field *ngIf="hasMailingAddress">
+          <input matInput name="mailaddr2" autocomplete="new-mailaddr2" placeholder="Mailing Address2" formControlName="mailingAddr2Ctrl">
+        </mat-form-field>
+        <mat-form-field *ngIf="hasMailingAddress">
+          <input #zipcode name="mailzip" autocomplete="new-mailzip" matInput placeholder="Mailing Zip Code"
+            formControlName="mailingZipCtrl" required (change)="onMailingZipCodeChange(zipcode.value)">
+        </mat-form-field>
+        <mat-form-field *ngIf="hasMailingAddress">
+          <input matInput name="mailcity" autocomplete="new-mailcity" placeholder="Mailing City" formControlName="mailingCityCtrl"
+            required>
+        </mat-form-field>
+        <mat-form-field *ngIf="hasMailingAddress">
+          <input matInput name="mailstate" autocomplete="new-mailstate" placeholder="Mailing State" formControlName="mailingStateCtrl"
+            required>
+        </mat-form-field>
+        <mat-form-field *ngIf="hasMailingAddress">
+          <mat-select placeholder="Country" formControlName="mailingCountryCtrl">
+            <mat-option value="United States">United States</mat-option>
+            <mat-option value="Canada">Canada</mat-option>
+          </mat-select>
+
+        </mat-form-field>
+
+        <div>
+          <button mat-button mat-raised-button matStepperPrevious class="btn-white">Back</button>
+          <button mat-button mat-raised-button class="btn-black" color="primary" [disabled]="!customerInfoFormGroup.valid" 
+            matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-card>
+  </mat-step>
+  <mat-step [stepControl]="dealerInfoFormGroup">
+    <mat-card>
+
+
+      <form fxLayout="column" [formGroup]="dealerInfoFormGroup">
+        <ng-template matStepLabel>Dealer Info</ng-template>
+        <mat-form-field>
+          <input matInput name="maildealer" autocomplete="new-dealer" placeholder="Dealer Name" formControlName="dlrNameCtrl"
+            required>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput name="mailphone" autocomplete="new-dlrphone" placeholder="Dealer Phone" formControlName="dlrPhoneCtrl"
+            required>
+        </mat-form-field>
+        <!-- <mat-form-field *ngIf="IsDaikinUnit">
+          <input matInput autocomplete="nope" placeholder="Dealer ZipCode" formControlName="dlrZipCodeCtrl" required>
+        </mat-form-field>
+        <mat-form-field *ngIf="IsDaikinUnit">
+          <input matInput autocomplete="nope" placeholder="Dealer Addr1" formControlName="dlrAddr1Ctrl" required>
+        </mat-form-field>
+        <mat-form-field *ngIf="IsDaikinUnit">
+          <input matInput autocomplete="nope" placeholder="Dealer City" formControlName="dlrCityCtrl" required>
+        </mat-form-field>
+        <mat-form-field *ngIf="IsDaikinUnit">
+          <input matInput autocomplete="nope" placeholder="Dealer State" formControlName="dlrStateCtrl" required>
+        </mat-form-field>
+        <mat-form-field *ngIf="IsDaikinUnit">
+          <input matInput autocomplete="nope" placeholder="Dealer Country" formControlName="dlrCountryCtrl" required>
+        </mat-form-field> -->
+        <div>
+          <button mat-button mat-raised-button matStepperPrevious class="btn-white">Back</button>
+          <button mat-button mat-raised-button class="btn-black" color="primary" [disabled]="!dealerInfoFormGroup.valid"
+            (click)="openUnitCoverageDialog(stepper)">Register</button>
+        </div>
+      </form>
+    </mat-card>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Confirmation</ng-template>
+    <section id="pdfContent" #pdfContent>
+      <div class="forPrintOnly">
+        <h2>Registration Certificate </h2>
+        <p>Thank you for registering your products with us. We appreciate your business and will work hard to ensure
+          that all
+          of our products will provide you with years of reliable service. </p>
+      </div>
+
+      <mat-card class="customer-information">
+        <mat-card-header>
+          <mat-card-title class="mat-card-customer-information-header">Customer Information</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="mat-card-customer-information-content">
+          <div fxLayout="row">
+            <div *ngIf="!isCommericalType" fxFlex="45">
+              <label class="customerinfo-label">First Name:</label>
+              <label>{{consumer?.FirstName}}</label>
+            </div>
+         
+            <div *ngIf="isCommericalType" fxFlex="45">
+                <label class="customerinfo-label">&nbsp;</label>
+                <label>&nbsp;</label>
+              </div>
+            <div fxFlex="45">
+              <label class="customerinfo-label">Zip:</label>
+              <label>{{consumer?.Zip}}</label>
+            </div>
+
+          </div>
+          <div fxLayout="row">
+            <div *ngIf="!isCommericalType" fxFlex="45">
+              <label class="customerinfo-label">Last Name:</label>
+              <label>{{consumer?.LastName}}</label>
+            </div>
+            <div *ngIf="isCommericalType" fxFlex="45">
+                <label class="customerinfo-label">Business Name:</label>
+                <label>{{consumer?.CompanyName}}</label>
+              </div>
+            <div fxFlex="45">
+              <label class="customerinfo-label">Country:</label>
+              <label>{{consumer?.Country}}</label>
+            </div>
+
+          </div>
+
+          <div fxLayout="row">
+            <div fxFlex="45">
+              <label class="customerinfo-label">Address1:</label>
+              <label>{{consumer?.Address1}}</label>
+            </div>
+            <div fxFlex="45">
+              <label class="customerinfo-label">Phone:</label>
+              <label>{{consumer?.PhoneNumber}}</label>
+            </div>
+
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="45">
+              <label class="customerinfo-label">Address2:</label>
+              <label>{{consumer?.Address2}}</label>
+            </div>
+            <div fxFlex="45">
+              <label class="customerinfo-label">Email:</label>
+              <label>{{consumer?.Email}}</label>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="45">
+              <label class="customerinfo-label">City:</label>
+              <label>{{consumer?.City}}</label>
+            </div>
+            <div fxFlex="45">
+              <label class="customerinfo-label">Dealer Name:</label>
+              <label>{{installer?.Name}}</label>
+            </div>
+          </div>
+          <div fxLayout="row">
+            <div fxFlex="45">
+              <label class="customerinfo-label">State:</label>
+              <label>{{consumer?.state}}</label>
+            </div>
+            <div fxFlex="45">
+              <label class="customerinfo-label">Dealer Phone:</label>
+              <label>{{installer?.Phone}}</label>
+            </div>
+          </div>
+          <!-- <div *ngIf="installer?.Address1 != ''" fxLayout="row">
+                        <div  fxFlex="45">
+                            <label  class="customerinfo-label">Dealer Address:</label>
+                            <label>{{installer?.Address1}}, {{installer?.City}}, {{installer?.State}}{{installer?.ZipCode}}</label>
+                        </div>
+                        <div fxFlex="45">
+                            <label  class="customerinfo-label">Dealer Email:</label>
+                            <label>{{installer?.Email}}</label>
+                        </div>
+                      </div> -->
+
+        </mat-card-content>
+
+
+      </mat-card>
+
+      <!--Product Details-->
+      <section #customerinformation>
+        <label class="product-detail-header">Product Details</label>
+        <ul class="product-details">
+          <li *ngFor="let entitlement of entitlements| async">
+            <reg-product-info [entitlement]="entitlement"></reg-product-info>
+          </li>
+        </ul>
+      </section>
+    </section>
+    <div class="confirmation-message">
+
+
+      <p>
+        <span>
+          <img width="25px" src="./assets/images/check.png">
+        </span> Success! Your product has been Registered.Click below to Print a copy of this form for your records.</p>
+    </div>
+    <div class="action-buttons" >
+      <button  mat-button mat-raised-button class="btn-black" (click)="download()">Download Certificate</button>
+      <button mat-button mat-raised-button class="btn-black" (click)="email()">Email Certificate</button>
+      <button  mat-button mat-raised-button class="btn-black" (click)="print()">Print</button>
+      <button  mat-button mat-raised-button class="btn-black" (click)="startNewRegistration(stepper)">Start New
+        Registration</button>
+      <button  mat-button mat-raised-button class="btn-black" (click)="addAnotherUnitClick(stepper)">Register Another
+        Unit</button>
+
+    </div>
+    <div class="bazzarreview">
+      <p>Click the link below to share your feedback with fellow homeowners so that they can make an informed purchase
+        decision.
+        <br>Completing this review will qualify you for our monthly drawing to win one of three $250 Visa gift cards.</p>
+      <p> Sweepstakes valid for this calendar month. Three prizes of $250 will be paid to survey respondents at random.</p>
+      <p>
+        NO PURCHASE OR PAYMENT OF ANY KIND IS NECESSARY TO ENTER OR WIN THIS SWEEPSTAKES. A PURCHASE WILL NOT IMPROVE<br>
+        YOUR CHANCES OF WINNING. MAIL-IN SUBMISSIONS POSSIBLE. THIS SWEEPSTAKES IS VOID WHERE PROHIBITED BY LAW. OPEN
+        <br>
+        ONLY TO LEGAL RESIDENTS OF THE UNITED STATES WHO ARE AGE OF MAJORITY IN THEIR RESPECTIVE STATE.</p>
+      <p> For a complete set of rules and for alternative entry, please mail to Monthly Homeowner Survey, 5151 San
+        Felipe, Suite 500,</p>
+      <div class="review-btn-center">
+        <a target="_blank" mat-button mat-raised-button href="{{baazarVoiceUrl}}" class="btn-lightblue">Leave us a
+          review.</a>
+      </div>
+
+    </div>
+
+    <!-- <mat-card class="product-details">
+          <mat-card-header>
+            <mat-card-title class="mat-card-customer-information-header">Product Details</mat-card-title>
+          </mat-card-header>
+      
+          <mat-card-content class="mat-card-customer-information-content" >
+            <div class="unit-information">
+            <div fxLayout="row">
+              <div fxFlex="33">
+                  <label class="customerinfo-label">Serial Number:</label>
+                  <label>{{entitlement?.SerNum}}</label>
+              </div>
+              <div fxFlex="66">
+                  <label  class="customerinfo-label">Model Description:</label>
+                  <label>{{entitlement?.Modeldesc}}</label>
+                 
+              </div>
+            </div>
+            <div fxLayout="row">
+                <div fxFlex="33">
+                    <label  class="customerinfo-label">Model:</label>
+                    <label>{{entitlement?.Model}}</label>
+                </div>
+                <div fxFlex="66">
+                    <label class="customerinfo-label">Registration Date:</label>
+                    <label>{{entitlement?.RegistrationDate | date :'MM/dd/yyyy'}}</label>
+                </div>
+              </div>
+              <div fxLayout="row">
+                  <div fxFlex="33">
+                      <label  class="customerinfo-label">Install Date:</label>
+                      <label>{{entitlement?.InstallDate |date :'MM/dd/yyyy'}}</label>
+                  </div>
+                  <div fxFlex="66">
+                      <label class="customerinfo-label">Manufacture Date:</label>
+                      <label>{{entitlement?.ManufactureDate |date :'MM/dd/yyyy'}}</label>
+                  </div>
+                </div>
+              </div>
+            <div class="coverage-information">
+            
+              <div [innerHTML]="entitlement?.StandardCoverage" class="standard-coverage">
+            
+              </div>
+              <div [innerHTML]="entitlement?.RegisteredCoverage" class="registered-coverage">
+              </div>
+            </div>
+          </mat-card-content>
+          </mat-card> -->
+
+  </mat-step>
+</mat-horizontal-stepper>

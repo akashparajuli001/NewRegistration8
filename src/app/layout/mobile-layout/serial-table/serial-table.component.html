@@ -1,0 +1,20 @@
+<div #serialTable class="serial-table">
+        <mat-icon class="mat-icon-close" (click)="onCloseClick(serialTable)" >cancel</mat-icon>
+  
+        <table class="serialtable">
+            <tr>
+             <td class="tbl-header">Serial#:</td>
+             <td [style.color]="unit.warning" class="serial">{{unit.serialnumber}}</td>
+            </tr>
+            <tr>
+             <td class="tbl-header">Model#:</td>
+             <td [style.color]="unit.warning" class="model">{{unit.item}}</td>
+            </tr>
+            <tr>
+             <td class="tbl-header">Desc:</td>
+             <td [style.color]="unit.warning" class="modeldesc">{{unit.modeldesc}}</td>
+            </tr>
+           </table>
+</div>
+       
+   

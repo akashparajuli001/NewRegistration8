@@ -1,0 +1,26 @@
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+  }
+  /* Zebra striping */
+  tr:nth-of-type(odd) { 
+    background:white; 
+  }
+  th { 
+    background: #CCCCCC; 
+    color: white; 
+    font-weight: bold; 
+  }
+  td, th { 
+    padding: 6px; 
+    border: 1px solid #ccc; 
+    text-align: left; 
+  }
+  tr:nth-of-type(odd) {
+    background:#faebd721;
+}
+
+button.btn-black.mat-raised-button {
+    background-color: black;
+    color: white;
+}
