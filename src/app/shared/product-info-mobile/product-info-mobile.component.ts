@@ -13,13 +13,13 @@ export class ProductInfoMobileComponent implements OnInit {
 
   ngOnInit() {
   }
-  getInstallDate(instDate){
-    let uInstalldate =  moment(instDate).format('MM/DD/YYYY')
-    var uinstDate =   timezone(moment(instDate));
-    let isPDT =  uinstDate.tz('America/Los_Angeles').format('ha z');
-    if(isPDT.indexOf('PDT') > 0){
+  getInstallDate(instDate) {
+    let uInstalldate =  moment(instDate).format('MM/DD/YYYY');
+    const uinstDate =   timezone(moment(instDate));
+    const isPDT =  uinstDate.tz('America/Los_Angeles').format('ha z');
+    if (isPDT.indexOf('PDT') > 0) {
       moment(instDate).add(5, 'hours').format('MM/DD/YYYY');
-      uInstalldate =moment(instDate).add(5, 'hours').format('MM/DD/YYYY');
+      uInstalldate = moment(instDate).add(5, 'hours').format('MM/DD/YYYY');
     }
     return uInstalldate;
   }

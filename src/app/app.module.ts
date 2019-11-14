@@ -48,10 +48,8 @@ import { SerialTableComponent } from './layout/mobile-layout/serial-table/serial
   ],
   imports: [
     HttpClientModule,
-    // tslint:disable-next-line: deprecation
     HttpModule,
     BrowserModule,
-    //FocusDirective,
     FormsModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
@@ -64,7 +62,7 @@ import { SerialTableComponent } from './layout/mobile-layout/serial-table/serial
     DeviceDetectorModule.forRoot()
   ],
   entryComponents: [
-    //SerialTableComponent,
+    SerialTableComponent,
     DailogContentProductComponent,
     DailogContentConfirmationComponent,
     DailogContentUnitcoverageComponent
